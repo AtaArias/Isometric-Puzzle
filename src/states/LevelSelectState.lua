@@ -1,5 +1,34 @@
 LevelSelectState = Class{__includes = BaseState}
 
+local menuB = { x = 20, y = 20, width = 80, height = 30, text = 'Menu',
+                call = function()
+                    gSounds['button']:play()
+                    gStateMachine:change('start')
+                end,
+                render = function(self) 
+                    love.graphics.rectangle('fill', self.x, self.y, self.width, self.height, 2)
+
+                    love.graphics.setColor(0,0,0,1)
+                    love.graphics.printf(self.text, self.x, self.y, self.width, 'center')
+
+                    love.graphics.setColor(1,1,1,1)
+                end,
+                update = function(self)
+                    msx, msy = push:toGame(love.mouse.getPosition())
+
+                    if not msx or not msy then
+                        return
+                    elseif not love.mouse.isDown(1) then
+                        return
+                    end
+
+                    if msx > self.x and msx < self.x + self.width and
+                        msy > self.y and msy < self.y + self.width then
+                            self.call()
+                    end
+                end
+                }
+
 local scaleFac = 0.5
 
 local xoff, yoff = 2.5 * scaleFac * 64, 80
@@ -50,6 +79,8 @@ local function drawButtons()
 end
 
 function LevelSelectState:update(dt)
+    menuB:update()
+
     touching = 0
 
     --check for input and begin that level
@@ -80,6 +111,7 @@ function LevelSelectState:render()
     drawBackground()
     drawLevelGrid()
     drawButtons()
+    menuB:render()
 end
 
 function drawLevelGrid()
