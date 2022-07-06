@@ -134,6 +134,9 @@ function PlayState:render()
     end
     love.graphics.origin()
 
+    -- Display jumps
+    love.graphics.printf('Jump dist: '.. tostring(self.power + 1), 0, WINDOW_HEIGHT - 40, WINDOW_WIDTH,'center')
+    
     love.graphics.draw(psystem, psysX, psysY)
 end
 
